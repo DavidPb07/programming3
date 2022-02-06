@@ -1,82 +1,56 @@
-class Predator {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+let LivingCreature = require('./LivingCreature')
+
+module.exports = class Predator extends LivingCreature{
+    constructor(x, y,index) {
+        super(x, y, index)
         this.energy = 50;
         this.multiply = 0
-        this.directions = [];
+        this.directions = [];   
     }
 
-    getNewCoordinates() {
-        this.directions = [
-            [this.x - 1, this.y - 1],
-            [this.x, this.y - 1],
-            [this.x + 1, this.y - 1],
-            [this.x - 1, this.y],
-            [this.x + 1, this.y],
-            [this.x - 1, this.y + 1],
-            [this.x, this.y + 1],
-            [this.x + 1, this.y + 1]
-        ];
-    }
 
-    chooseCell(character) {
-        this.getNewCoordinates()
-        var found = [];
-        for (var i in this.directions) {
-            var x = this.directions[i][0];
-            var y = this.directions[i][1];
-            if (x >= 0 && x < matrix[0].length && y >= 0 && y < matrix.length) {
-
-                if (matrix[y][x] == character) {
-                    found.push(this.directions[i]);
-                }
-            }
-        }
-        return found;
-    }
     move() {
         this.energy--
-        var emptyCells = this.chooseCell(0)
+        var emptyCells = super.chooseCell(0)
         var newCell = emptyCells[Math.floor(Math.random() * emptyCells.length)]
-        var emptyCells1 = this.chooseCell(1)
+        var emptyCells1 = super.chooseCell(1)
         var newCell1 = emptyCells1 [Math.floor(Math.random() * emptyCells1.length)]
-        if (newCell && this.energy >= 0) {
+        if (newCell && super.energy >= 0) {
             var newX = newCell[0]
             var newY = newCell[1]
-            matrix[newY][newX] = matrix[this.y][this.x]
-            matrix[this.y][this.x] = 0
-            this.x = newX
-            this.y = newY
+            matrix[newY][newX] = matrix[super.y][super.x]
+            matrix[super.y][super.x] = 0
+            super.x = newX
+            super.y = newY
         }
-        else if (newCell1 && this.energy >= 0) {
+        else if (newCell1 && super.energy >= 0) {
                 var newX = newCell1[0]
                 var newY = newCell1[1]
-                matrix[newY][newX] = matrix[this.y][this.x]
-                matrix[this.y][this.x] = 1
-                this.x = newX
-                this.y = newY
+                matrix[newY][newX] = matrix[super.y][super.x]
+                matrix[super.y][super.x] = 1
+                super.x = newX
+                super.y = newY
         } else {
-            if (this.energy < 0) {
-                this.die()
+            if (super.energy < 0) {
+                super.die()
             }
         }
     }
     eat() {
-        var emptyCells = this.chooseCell(2)
+        var emptyCells = super.chooseCell(2)
         var newCell = emptyCells[Math.floor(Math.random() * emptyCells.length)]
 
-        var emptyCells1 = this.chooseCell(4)
+        var emptyCells1 = super.chooseCell(4)
         var newCell1 = emptyCells1[Math.floor(Math.random() * emptyCells1.length)]
         if (newCell) {
             this.energy++
             var newX = newCell[0]
             var newY = newCell[1]
 
-            matrix[newY][newX] = matrix[this.y][this.x]
-            matrix[this.y][this.x] = 0
-            this.x = newX
-            this.y = newY
+            matrix[newY][newX] = matrix[super.y][super.x]
+            matrix[super.y][super.x] = 0
+            super.x = newX
+            super.y = newY
             for (var i in grassEaterArr) {
                 if (newX == grassEaterArr[i].x && newY == grassEaterArr[i].y) {
                     grassEaterArr.splice(i, 1)
@@ -88,10 +62,10 @@ class Predator {
             var newX = newCell1[0]
             var newY = newCell1[1]
 
-            matrix[newY][newX] = matrix[this.y][this.x]
-            matrix[this.y][this.x] = 0
-            this.x = newX
-            this.y = newY
+            matrix[newY][newX] = matrix[super.y][super.x]
+            matrix[super.y][super.x] = 0
+            super.x = newX
+            super.y = newY
             for (var i in predEnergArr) {
                 if (newX == predEnergArr[i].x && newY == predEnergArr[i].y) {
                     predEnergArr.splice(i, 1)
@@ -100,13 +74,13 @@ class Predator {
             }
         }
         else {
-            this.move()
+            super.move()
         }
     }
     die() {
-        matrix[this.y][this.x] = 0;
+        matrix[super.y][super.x] = 0;
         for (var i in PredatorArr) {
-            if (this.x == PredatorArr[i].x && this.y == PredatorArr[i].y) {
+            if (super.x == PredatorArr[i].x && super.y == PredatorArr[i].y) {
                 PredatorArr.splice(i, 1);
                 break;
             }
